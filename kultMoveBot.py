@@ -71,9 +71,10 @@ async def on_message(message):
             dice += "Please specify a Move"
 
         if len(bits)>1:
-            if bits[1] == "?":
+            if bits[1] %in% ["?", "help"]:
                 dice += "# Usage:\n"
                 dice += "!move ? - displays this message\n"
+                dice += "!move help - displays this message\n"
                 dice += "!move xxx - roll to perform Move xxx\n"
                 dice += "!move xxx -1 - roll to perform Move xxx with negative modifier -1\n"
                 dice += "!move xxx +2 - roll to perform Move xxx with positive modifier +2\n"

@@ -159,7 +159,7 @@ async def on_message(message):
 ## Write login details locally (i.e., on linux box where bot code is running)
 @client.event
 async def on_ready():
-    await client.change_presence(activity=discord.Game(name="Alas: !move ? for help"))
+    await client.change_presence(activity=discord.Game(name="Kult: !move ? for help"))
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)

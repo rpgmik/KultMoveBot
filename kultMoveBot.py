@@ -71,7 +71,7 @@ async def on_message(message):
             dice += "Please specify a Move"
 
         if len(bits)>1:
-            if bits[1] %in% ["?", "help"]:
+            if bits[1] in ["?", "help"]:
                 dice += "# Usage:\n"
                 dice += "!move ? - displays this message\n"
                 dice += "!move help - displays this message\n"

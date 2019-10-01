@@ -50,8 +50,10 @@ inv = ['# Investigate', 'Ask two questions:\n - How can I find out more about wh
 
 hoh = ['# Help Or Hinder', 'You may modify the subsequent roll by +2/−2.', 'You may modify the subsequent roll by +1/−1.', 'Your interference has unintended consequences. The GM makes a Move.']
 
+non = ['# Non-standard move', 'You succeed', 'There are complications', 'The GM makes a Move']
+
 moves = ["ah", "ei", "kit", "aup", "eic", "ion", "iop", "sti", "rap",
-"oas", "inv", "hoh"]
+"oas", "inv", "hoh", "non"]
 
 ## Get discord connection
 client = discord.Client()
@@ -91,6 +93,7 @@ async def on_message(message):
                 dice += "- Observe A Situation (oas): roll + Perception\n"
                 dice += "- Investigate (inv): roll + Reason\n"
                 dice += "- Help Or Hinder (hoh): roll + Attribute\n"
+                dice += "- Non-standard move (non): roll + Modifier\n"
 
             elif bits[1] not in moves:
                 dice += 'Please specify a Move (or "!move ?" for help)'
@@ -121,6 +124,8 @@ async def on_message(message):
                     options = inv
                 if bits[1] == "hoh":
                     options = hoh
+                if bits[1] == "non":
+                    options = non
 
                 result = roll[0] + roll[1]
                 mod = ''

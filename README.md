@@ -8,3 +8,5 @@ Python Discord bot for "move rolls" in the PBTA roleplaying game "Kult Divinity 
 ### Feature requests
 - ~Add "!move help" as additional help option~
 - ~Add ability to roll for generic move~
+- make commands case insensitive.
+

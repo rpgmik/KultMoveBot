@@ -74,8 +74,7 @@ in Discord will produce the Usage message below.
 - Non-standard move (non): roll + Modifier
 ```
 
-
-# Anomalies (full move name):
+#### Anomalies (full move name):
 
 ```
 - Influence Other - NPC: !move influenceothernpc

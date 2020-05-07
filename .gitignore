@@ -1,8 +1,6 @@
-kultMoveTest.py
 devToken.txt
 modeFile.txt
 prodToken.txt
 runBot.sh
 nohup.out
-test.sh
-kultMoveBot-BKP.py
+__pycache__

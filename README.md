@@ -1,5 +1,5 @@
 # KultMoveBot - version 2.0
-Python Discord bot for "move rolls" in the PBTA roleplaying game "Kult Divinity Lost".
+Python Discord bot for "move rolls" in the roleplaying game KULT: Divinity Lost.
 
 ### UPGRADED TO VERSION 2.0: 7 MAY 2020
 

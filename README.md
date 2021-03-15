@@ -4,15 +4,16 @@ Python Discord bot for "move rolls" in the roleplaying game KULT: Divinity Lost.
 ### UPGRADED TO VERSION 2.0: 7 MAY 2020
 
 - See below for usage instructions.
-- Huge thanks to Frost for taking on the mammoth task of extracting and formatting ALL of the Kult moves for use here.
+- Huge thanks to Frost for taking on the mammoth task of extracting and formatting ALL of the KULT moves for use here.
 
-###  Kult discord server:
+###  Discord servers:
 
-- KULT: Elysium https://discord.gg/QmRB2qN
- 
+- KULT - Elysium: https://discord.gg/QmRB2qN
+- KultMoveBot support: https://discord.gg/NFWYk9hNHZ
+
 ### Bugs
 - none yet!
-- Ping me (\@mik) on the above server if you notice any bot issues...
+- Ping me (\@mik) on either of the above servers if you notice any bot issues...
 
 ### Feature requests
 - they will come...

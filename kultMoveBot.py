@@ -6,6 +6,8 @@
 import random
 import discord
 import all_moves
+from discord.utils import get
+from datetime import datetime
 
 ## Ascertain mode: dev or production
 m = open('modeFile.txt', "r")
@@ -110,13 +112,35 @@ async def on_message(message):
                 result = roll[0] + roll[1]
                 mod = ''
 
+                guild = get(message.guild.name)
+                
+                # print(message.guild.id)
+                # print(message.guild.name)
+                
+                dt = datetime.now().strftime("%Y-%m-%d, %H:%M:%S")
+
+                # print(dt)
+                
+                saveDat =  str(dt)
+                saveDat += ", " + str(message.guild.id)
+                saveDat += ", " + message.guild.name
+                saveDat += ", " + message.content
+                saveDat += ", " + str(roll[0]) + " + " + str(roll[1])
+
                 if len(bits) > 2:
                     mod = [' ',list(bits[2])[0],' ',list(bits[2])[1],' ']
                     mod = gap.join(mod)
+                    saveDat += ' ' + list(bits[2])[0] + ' ' + list(bits[2])[1]
                     if list(bits[2])[0]=="+":
                         result = result + int(list(bits[2])[1])
                     elif list(bits[2])[0]=="-":
                         result = result - int(list(bits[2])[1])
+
+                saveDat += ", " + str(result) + "\n"
+
+                ## Write to file
+                with open('info.txt','a') as file:
+                    file.write(saveDat)
 
                 if result < 10:
                     outcome = options[3]

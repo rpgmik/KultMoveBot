@@ -4,4 +4,6 @@ prodToken.txt
 runBot.sh
 nohup.out
 info.txt
+kultMoveBot.errlog
+kultMoveBot.log
 __pycache__

@@ -74,11 +74,17 @@ async def on_message(message):
 
     ## Bot info
     info=""
-    info += "# KultMoveBot\n"
-    info += "Code available at: https://github.com/rpgmik/KultMoveBot\n"
+    # info += "**KultMoveBot**\n"
     ## Collect server install info
-    info += "Currently running on " + str(len(list(client.guilds))) + " Discord guilds.\n"
-
+    info += "**Currently running on " + str(len(list(client.guilds))) + " Discord servers.**\n"
+    info += "Code available at: \n"
+    info += "<https://github.com/rpgmik/KultMoveBot>"
+    info += "\n"
+    info += "To add the bot to your server: \n"
+    info += "<https://discordapp.com/api/oauth2/authorize?client_id=625741456082206740&permissions=0&scope=bot>"
+    info += "\n"
+    info += "Discord server for bot support issues: \n"
+    info += "<https://discord.gg/fE7AVtm9Yu>"
     ## Converts move command to lowercase, making it
     ## case insensitive
     message.content=message.content.lower()
@@ -98,7 +104,7 @@ async def on_message(message):
                 dice += help
 
             elif bits[1] in ["info"]:
-                dice += info
+                dice += ""
 
             elif bits[1] not in moves:
                 dice += 'Please specify a Move (or "!move ?" for help)'
@@ -161,6 +167,9 @@ async def on_message(message):
                 dice += outcome
 
         dice += '```'
+
+        if bits[1] in ["info"]:
+            dice = info
 
         ## Send message to channel
         await message.channel.send(dice)

@@ -39,7 +39,7 @@ in Discord will produce the Usage message below.
 ```
 !move ? - displays this message
 !move help - displays this message
-!move info - displays bot code info
+!move info - displays bot support info
 !move xxx - roll to perform Move xxx
 !move xxx -1 - roll to perform Move xxx with negative modifier -1
 !move xxx +2 - roll to perform Move xxx with positive modifier +2

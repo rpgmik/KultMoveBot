@@ -5,9 +5,13 @@
 
 import random
 import discord
-import all_moves
+import yaml
 from discord.utils import get
+from discord.ext import commands
 from datetime import datetime
+
+description = 'Kult Move Bot'
+bot = commands.Bot(command_prefix='!', description=description)
 
 ## Ascertain mode: dev or production
 m = open('modeFile.txt', "r")
@@ -29,7 +33,8 @@ f.close()
 sep = ' '
 gap = ''
 
-moves = all_moves.moves
+with open('./all_moves.yml', 'r') as stream:
+  moves = yaml.safe_load(stream)
 
 help=""
 
@@ -65,89 +70,66 @@ help += "# Anomalies (full move name):\n"
 help += "- Influence Other - NPC: !move influenceothernpc\n" 
 help += "- Influence Other - PC: !move influenceotherpc\n" 
 
-## Get discord connection
-client = discord.Client()
+@bot.event
+async def on_ready():
+    print(bot.user.id)
+    print(bot.user.name)
+    print('---------------')
+    print('This bot is ready for action!')
 
-## Define an event so that Bot can read messages
-@client.event
-async def on_message(message):
+@bot.command(pass_context=True)
+async def move(ctx, *args):
 
-    ## Bot info
-    info=""
-    # info += "**KultMoveBot**\n"
-    ## Collect server install info
-    info += "**Currently running on " + str(len(list(client.guilds))) + " Discord servers.**\n"
-    info += "Code available at: \n"
-    info += "<https://github.com/rpgmik/KultMoveBot>"
-    info += "\n"
-    info += "To add the bot to your server: \n"
-    info += "<https://discordapp.com/api/oauth2/authorize?client_id=625741456082206740&permissions=0&scope=bot>"
-    info += "\n"
-    info += "Discord server for bot support issues: \n"
-    info += "<https://discord.gg/fE7AVtm9Yu>"
-    ## Converts move command to lowercase, making it
-    ## case insensitive
-    message.content=message.content.lower()
-
-    ## Respond if user sends "!move"
-    if message.content.startswith('!move'):
-
-        ## Split into into "!move", the type of Move to undertake, the modifier (if any), and a comment (if any).
-        bits = message.content.split(" ")
-
+    if len(args)==0:
         dice = '```md\n'
-        if len(bits)==1:
-            dice += "Please specify a Move (or use '!move ?' for help)"
+        dice += "Please specify a Move (or use '!move ?' for help)"
+        dice += '```'
 
-        if len(bits)>1:
-            if bits[1] in ["?", "help"]:
-                dice += help
+    else:
+        bits = [x.lower() for x in args]
 
-            elif bits[1] in ["info"]:
-                dice += ""
+        if bits[0] in ["?", "help"]:
+            dice = '```md\n'
+            dice += help
+            dice += '```'
 
-            elif bits[1] not in moves:
-                dice += 'Please specify a Move (or "!move ?" for help)'
+        elif bits[0] in ["info"]:
+            ## Collect server install info
+            dice = "**Currently running on " + str(len(bot.guilds)) + " Discord servers.**\n"
+            dice += "Code available at: \n"
+            dice += "<https://github.com/rpgmik/KultMoveBot>"
+            dice += "\n"
+            dice += "To add the bot to your server: \n"
+            dice += "<https://discordapp.com/api/oauth2/authorize?client_id=625741456082206740&permissions=0&scope=bot>"
+            dice += "\n"
+            dice += "Discord server for bot support issues: \n"
+            dice += "<https://discord.gg/fE7AVtm9Yu>"
+            
+        elif bits[0] not in list(moves):
+            dice = '```md\n'
+            dice += 'Please specify a Move (or "!move ?" for help)'
+            dice += '```'
 
-            elif bits[1] in moves:
+        elif bits[0] in list(moves):
+
+            try:
                 roll = [random.randint(1,10), random.randint(1,10)]
 
-                #Instead of going by case to case basis, think about how easy it is to add moves now
-                options = moves[bits[1]]
+                options = moves[bits[0]]
 
                 result = roll[0] + roll[1]
                 mod = ''
 
-                guild = get(message.guild.name)
-                
-                # print(message.guild.id)
-                # print(message.guild.name)
-                
-                dt = datetime.now().strftime("%Y-%m-%d, %H:%M:%S")
-
-                # print(dt)
-                
-                saveDat =  str(dt)
-                saveDat += ", " + str(message.guild.id)
-                saveDat += ", " + message.guild.name
-                saveDat += ", " + message.content
-                saveDat += ", " + str(roll[0]) + " + " + str(roll[1])
-
-                if len(bits) > 2:
-                    mod = [' ',list(bits[2])[0],' ',list(bits[2])[1],' ']
+                # Add mofifier to dice
+                if len(bits) > 1:
+                    mod = [' ',list(bits[1])[0],' ',list(bits[1])[1],' ']
                     mod = gap.join(mod)
-                    saveDat += ' ' + list(bits[2])[0] + ' ' + list(bits[2])[1]
-                    if list(bits[2])[0]=="+":
-                        result = result + int(list(bits[2])[1])
-                    elif list(bits[2])[0]=="-":
-                        result = result - int(list(bits[2])[1])
+                    if list(bits[1])[0]=="+":
+                        result = result + int(list(bits[1])[1])
+                    elif list(bits[1])[0]=="-":
+                        result = result - int(list(bits[1])[1])
 
-                saveDat += ", " + str(result) + "\n"
-
-                ## Write to file
-                with open('info.txt','a') as file:
-                    file.write(saveDat)
-
+                # Determine outcome
                 if result < 10:
                     outcome = options[3]
                 elif result > 14:
@@ -155,6 +137,8 @@ async def on_message(message):
                 else:
                     outcome = options[2]
 
+                # Format data for output
+                dice = '```md\n'
                 dice += options[0]
                 dice += "\nResult: "
                 dice += str(roll[0])
@@ -165,26 +149,40 @@ async def on_message(message):
                 dice += str(result)
                 dice += "\nOutcome: "
                 dice += outcome
+                dice += '```'
 
-        dice += '```'
+                # Collect move data for saving
+                guild = get(ctx.message.guild.name)                                
+                dt = datetime.now().strftime("%Y-%m-%d, %H:%M:%S")
+                saveDat =  str(dt)
+                saveDat += ", " + str(ctx.message.guild.id)
+                saveDat += ", " + ctx.message.guild.name
+                saveDat += ", " + ctx.message.content
+                saveDat += ", " + str(roll[0]) + " + " + str(roll[1])
+                if len(bits) > 1:
+                   saveDat += ' ' + list(bits[1])[0] + ' ' + list(bits[1])[1]
+                saveDat += ", " + str(result) + "\n"
 
-        if bits[1] in ["info"]:
-            dice = info
+                ## Write to file
+                with open('info.txt','a') as file:
+                    file.write(saveDat)
+            
+            except Exception:
+                dice = '```md\n'
+                dice += "Error with move synatx (type '!move ?' for help)"
+                dice += '```'
 
-        ## Send message to channel
-        await message.channel.send(dice)
+    ## Send message to channel
+    await ctx.send(dice)
 
-## Write login details locally (i.e., on linux box where bot code is running)
-@client.event
-async def on_ready():
-    await client.change_presence(activity=discord.Game(name="Kult: !move ? for help"))
-    print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
-    print("Installed on",len(list(client.guilds)), "guilds:")
-    for s in list(client.guilds):
-        print("- " + s.name)
-    print('------')
+if __name__ == '__main__':
+    try:
+        bot.run(TOKEN)
+    except Exception as e:
+        print('Could Not Start Bot')
+        print(e)
+    finally:
+        print('Closing Session')
+        session.close()
 
-## Run Bot on Discord server
-client.run(TOKEN)
+bot.run(TOKEN)
